@@ -279,3 +279,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+images/256.gif
+images/256.ico
+images/256.png
