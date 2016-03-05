@@ -78,11 +78,14 @@
             this.targetVersionBox.FormattingEnabled = true;
             this.targetVersionBox.Items.AddRange(new object[] {
             "5.3.2",
-            "5.4.0/5.5.0/5.5.1"});
+            "5.4.0",
+            "5.5.0",
+            "5.5.1"});
             this.targetVersionBox.Location = new System.Drawing.Point(343, 31);
             this.targetVersionBox.Name = "targetVersionBox";
             this.targetVersionBox.Size = new System.Drawing.Size(121, 21);
             this.targetVersionBox.TabIndex = 2;
+            this.targetVersionBox.SelectedIndexChanged += new System.EventHandler(this.targetVersionBox_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -128,7 +131,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 13);
             this.label3.TabIndex = 5;
-            this.label3.Text = "v0.1 by Kakkoii";
+            this.label3.Text = "v0.2 by Kakkoii";
             this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // Form1
