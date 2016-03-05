@@ -36,7 +36,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.dropZone = new System.Windows.Forms.Panel();
             this.dropZone2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.versionLabel = new System.Windows.Forms.Label();
             this.dropZone.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -123,16 +123,19 @@
             this.dropZone2.DragDrop += new System.Windows.Forms.DragEventHandler(this.dropZone_DragDrop);
             this.dropZone2.DragEnter += new System.Windows.Forms.DragEventHandler(this.dropZone_DragEnter);
             // 
-            // label3
+            // versionLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label3.Location = new System.Drawing.Point(407, 181);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "v0.2 by Kakkoii";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.versionLabel.AutoSize = true;
+            this.versionLabel.ForeColor = System.Drawing.Color.SlateGray;
+            this.versionLabel.Location = new System.Drawing.Point(407, 181);
+            this.versionLabel.Name = "versionLabel";
+            this.versionLabel.Size = new System.Drawing.Size(80, 13);
+            this.versionLabel.TabIndex = 5;
+            this.versionLabel.Text = "v0.3 by Kakkoii";
+            this.versionLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.versionLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.versionLabel_MouseClick);
+            this.versionLabel.MouseEnter += new System.EventHandler(this.versionLabel_MouseEnter);
+            this.versionLabel.MouseLeave += new System.EventHandler(this.versionLabel_MouseLeave);
             // 
             // Form1
             // 
@@ -140,7 +143,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(490, 199);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.versionLabel);
             this.Controls.Add(this.dropZone);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.targetVersionBox);
@@ -166,7 +169,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel dropZone;
         private System.Windows.Forms.Label dropZone2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label versionLabel;
     }
 }
 
