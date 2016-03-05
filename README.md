@@ -2,5 +2,5 @@
 Simple tool to convert your compiled or existing code532/540/550/551.bin files into an easily web launchable .MP4 version.<br/>
 <br/>
 Supports command line options for scripted workflow as well.<br/>
-<h2>Usage:</h2><br/>
+<h2>Usage:</h2>
 bin2mp4.exe [target system version] [input file] optional:[output directory and/or filename]
