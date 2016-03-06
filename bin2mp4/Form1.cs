@@ -10,8 +10,7 @@ namespace bin2mp4
     {
         string[] args = Environment.GetCommandLineArgs();
         public byte[] inBIN;
-        public byte[] inBIN_size;
-        public byte[] outMP4 = ByteData.mp4Base;
+        public byte[] outMP4 = new Byte[_MP4.ArraySize];
         public static string outMP4_name;
         public static string outMP4_dir;
         public static string targetVer = "540";
@@ -44,64 +43,92 @@ namespace bin2mp4
                 outMP4_name = Path.GetFileNameWithoutExtension(fileName);
             }
 
-            if (inBIN.Length > 26548)
+            if (inBIN.Length > 29832)
             {
-                label1.Text = "Input file exceeds 26.54kb size limit!";
+                label1.Text = "Input file exceeds 29.1KB (29832 bytes) size limit!";
                 if (cmdConvert)
                 {
                     Console.WriteLine("");
-                    Console.WriteLine( "Input File exceeds 26.54kb size limit!");
+                    Console.WriteLine(" Input file exceeds 29.1KB (29832 bytes) size limit!");
                     Environment.Exit(-5);
                 }
             }
             else
             {
-                _InjectBin(targetVer);
+                _GenerateMP4(targetVer);
+                _Save2File();
             }
         }
 
-        public void _InjectBin(string inVer)
+        public void _GenerateMP4(string inVer)
         {
-            outMP4 = ByteData.mp4Base;
-            _WriteBytes(inBIN,injectOffset); //Write our input .bin file to the required position in the file
+            _WriteBytes(_MP4.headerBytes, 0);
+            _FillBytes(_MP4.Header_Pattern.offset, _MP4.Header_Pattern.length, _MP4.Header_Pattern.spacing, _MP4.Header_Pattern.value);
+            _WriteBytes(_MP4.BinLeadInBytes, _MP4.BinLeadInOffset);
+            _FillBytes(_MP4.Bin_Fill.offset, _MP4.Bin_Fill.length, _MP4.Bin_Fill.spacing, _MP4.Bin_Fill.value);
+
+            //Start of version specific code
+            if (inVer == "532" || inVer == "540")
+            {
+                _PatternBytes(_MP4.v532_Pattern.offset, _MP4.v532_Pattern.length, _MP4.v532_Pattern.spacing, _MP4.v532_Pattern.value); 
+                _WriteBytes(_MP4.v532_Footer, _MP4.v532_FooterOffset);
+                if(inVer == "532") //Patch header for 5.3.2
+                {
+                    for(int i = 0; i <_MP4.v532_Header_Patch.offsets.Length; i++)
+                    {
+                        outMP4[ _MP4.v532_Header_Patch.offsets[i] ] = _MP4.v532_Header_Patch.values[i];
+                    }
+                }
+            }
+            else if (inVer == "550" || inVer == "551")
+            {
+                _PatternBytes(_MP4.v550_Pattern.offset, _MP4.v550_Pattern.length, _MP4.v550_Pattern.spacing, _MP4.v550_Pattern.value);
+                _WriteBytes(_MP4.v550_Footer, _MP4.v550_FooterOffset); 
+            }
+
+            _FillBytes(_MP4.Footer_Fill.offset, _MP4.Footer_Fill.length, _MP4.Footer_Fill.spacing, _MP4.Footer_Fill.value);
+            _WriteBytes(_MP4.Footer_Magic, _MP4.Footer_Magic_Offset);
+           // _PatternBytes(_MP4.Footer_Pattern.offset, _MP4.Footer_Pattern.length, _MP4.Footer_Pattern.spacing, _MP4.Footer_Pattern.values);
+
+            _WriteBytes(inBIN, _MP4.BinLeadInOffset + _MP4.BinLeadInBytes.Length - 2); //Write our input .bin file to the required position in the file
             _WriteBinSize(); //Write the hex length of our bin file to the appropriate location
-
-//Start of version specific byte changes
-            if (inVer == "532")
-            {  
-                _WriteBytes(ByteData.v532,0);
-            }
-            else if(inVer == "550" || inVer == "551")
-            {
-                _SprayByteRange(ByteData.v550_sprayRange[0], ByteData.v550_sprayRange[1], ByteData.v550_sprayBytes, 4); //Alter some bytes for 5.5.0+
-                _WriteBytes(ByteData.v550_patch, ByteData.v550_patchOffset); //Same thing
-            }
-//End
-            _Save2File();
         }
 
-        private void _WriteBytes(byte[] versionBytes, int offset)
+        private void _WriteBytes(byte[] inBytes, int offset)
         {
-            for (int i = 0; i < versionBytes.Length; i++)
+            for (int i = 0; i < inBytes.Length; i++)
             {
-                outMP4[i + offset] = versionBytes[i];
+                outMP4[i + offset] = inBytes[i];
             }
         }
 
         private void _WriteBinSize()
         {
-            inBIN_size = BitConverter.GetBytes(inBIN.Length);
+            byte[] inBIN_size = BitConverter.GetBytes(inBIN.Length);
             for (int i = 0; i < 4; i++)
             {
-                outMP4[injectOffset - i - 1] = inBIN_size[i];
+                outMP4[_MP4.BinLeadInOffset + _MP4.BinLeadInBytes.Length - 3 - i] = inBIN_size[i];
             }
         }
 
-        private void _SprayByteRange(int start,int end, byte byteVal, int spacing)
+        private void _FillBytes(int offset, int size, int spacing, byte byteVal)
         {
-            for (int i = start; i < end; i += spacing)
+            for (int i = 0; i < size; i += spacing)
             {
-                outMP4[i] = byteVal;
+                outMP4[i + offset] = byteVal;
+            }
+        }
+        private void _PatternBytes(int offset, int size, int spacing, byte[] byteVal)
+        {
+            int byteChoice = 0;
+            for (int i = 0; i < size; i += spacing)
+            {
+                outMP4[i + offset] = byteVal[byteChoice];
+                byteChoice += 1;
+                if(byteChoice == byteVal.Length)
+                {
+                    byteChoice = 0;
+                }
             }
         }
 

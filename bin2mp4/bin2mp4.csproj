@@ -62,7 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ByteData.cs" />
+    <Compile Include="_MP4.cs" />
     <Compile Include="_CommandLine.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
