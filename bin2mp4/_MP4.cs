@@ -2,8 +2,7 @@
 {
     class _MP4
     {
-//At offset 68-69 is the value for the total payload size, currently set to 0x0040 in little endian, thus 16384 bytes.
-//Create method to automatically adjust the payload based on this
+
 
         public static int ArraySize = 41224;
 
