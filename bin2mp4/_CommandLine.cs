@@ -85,7 +85,8 @@ namespace bin2mp4
                 outDir = Path.GetFullPath(outPath);
                 Form1.outMP4_name = Path.GetFileNameWithoutExtension(inPath);
             }
-            
+            if (outDir.Length == 0)
+                outDir = ".";
             if (!Directory.Exists(outDir))
             {
                 Console.WriteLine("");
