@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
 
 namespace bin2mp4
 {
     class _CommandLine
     {
-        public static string Init(string[] args, ComboBox.ObjectCollection targetVersions)
+        public static string Init(string[] args, string[] targetVersions)
         {
             if (args.Length > 4)
             {
@@ -32,7 +31,7 @@ namespace bin2mp4
             Form1.cmdConvert = true;
             return inPath;
         }
-        public static void VerCheck(string inputVer, ComboBox.ObjectCollection targetVersions)
+        public static void VerCheck(string inputVer, string[] targetVersions)
         {
             inputVer = inputVer.Replace("-", "");
             bool matchingVer = false;

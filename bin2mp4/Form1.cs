@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using System.IO;
 
 namespace bin2mp4
 {
-    public partial class Form1 : Form
+    public partial class Form1
     {
         string[] args = Environment.GetCommandLineArgs();
         public byte[] inBIN;
@@ -24,7 +23,6 @@ namespace bin2mp4
 
         public Form1()
         {
-            InitializeComponent();
             //AttachConsole doesn't exists nor is needed on Mono
             if (Type.GetType ("Mono.Runtime") == null)
                 AttachConsole(ATTACH_PARENT_PROCESS);
@@ -32,10 +30,10 @@ namespace bin2mp4
             //Check if command line arguments were given and do those instead of launching Windows form
             if (args.Length > 1)
             { 
-                _OpenFile(_CommandLine.Init(args, targetVersionBox.Items));
+                string[] targetVers = {"5.3.2", "5.4.0", "5.5.0", "5.5.1"};
+                _OpenFile(_CommandLine.Init(args, targetVers));
                 Environment.Exit(0);
             }
-            targetVersionBox.SelectedIndex = 1; //Set default version to 5.4
         }
         public void _OpenFile(string fileName)
         {
@@ -47,7 +45,6 @@ namespace bin2mp4
 
             if (inBIN.Length > 29832)
             {
-                label1.Text = "Input file exceeds 29.1KB (29832 bytes) size limit!";
                 if (cmdConvert)
                 {
                     Console.WriteLine("");
@@ -136,97 +133,10 @@ namespace bin2mp4
 
         public void _Save2File()
         {
-            if (!cmdConvert)
-            {
-                using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
-                {
-                    saveFileDialog1.FileName = outMP4_name;
-                    saveFileDialog1.Filter = "MP4 File | *.mp4";
-                    if (DialogResult.OK != saveFileDialog1.ShowDialog())
-                    {
-                        return;
-                    }
-                    File.WriteAllBytes(saveFileDialog1.FileName, outMP4);
-                }
-            }
-            else
-            {
-                string tempDir = Path.Combine(outMP4_dir, outMP4_name + ".mp4");
-                File.WriteAllBytes(tempDir, outMP4);
-                Console.WriteLine("");
-                Console.WriteLine(" File saved to: \"" + tempDir + "\"");
-            }
-        }
-//Windows Forms event triggers, further info about these can be found in Form1.Designer.cs
-        private void button1_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog1 = new OpenFileDialog())
-            {
-                openFileDialog1.Filter = "Binary File | *.bin";
-
-                if (DialogResult.OK != openFileDialog1.ShowDialog())
-                {
-                    return;
-                }
-                _OpenFile(openFileDialog1.FileName);
-            }
-        }
-
-        private void dropZone_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effect = DragDropEffects.Copy;
-            }
-        }
-
-        private void dropZone_DragDrop(object sender, DragEventArgs e)
-        {
-            int binsFound = 0;
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-            for (int i = 0; i < files.Length; i++ )
-            {
-                if(Path.GetExtension(files[i]) == ".bin")
-                {
-                    _OpenFile(files[i]);
-                    binsFound += 1;
-                }
-            }
-            if(binsFound == 0)
-            {
-                label1.Text = "No .bin files found!";
-            }
-            else if(binsFound == 1)
-            {
-                label1.Text = "1 .bin file converted.";
-            }
-            else
-            {
-                label1.Text = binsFound.ToString() + " .bin files converted.";
-            }
-        }
-
-        private void targetVersionBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            targetVer = targetVersionBox.Text.Replace(".","");
-            Console.WriteLine(targetVer);
-        }
-
-        private void versionLabel_MouseClick(object sender, MouseEventArgs e)
-        {
-            Process.Start("http://gbatemp.net/threads/tool-bin2mp4.417414/");
-        }
-    
-        private void versionLabel_MouseEnter(object sender, EventArgs e)
-        {
-            versionLabel.ForeColor = label2.ForeColor;
-            Console.WriteLine("hovered over");
-        }
-
-        private void versionLabel_MouseLeave(object sender, EventArgs e)
-        {
-            versionLabel.ForeColor = System.Drawing.Color.SlateGray;
+            string tempDir = Path.Combine(outMP4_dir, outMP4_name + ".mp4");
+            File.WriteAllBytes(tempDir, outMP4);
+            Console.WriteLine("");
+            Console.WriteLine(" File saved to: \"" + tempDir + "\"");
         }
     }
 }
