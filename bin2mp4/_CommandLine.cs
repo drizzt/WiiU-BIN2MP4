@@ -83,7 +83,7 @@ namespace bin2mp4
                 }
                 else
                 {
-                    outDir = Path.GetDirectoryName(outPath + "\\");
+                    outDir = Path.GetFullPath(outPath);
                     Form1.outMP4_name = Path.GetFileNameWithoutExtension(inPath);
                 }
             }

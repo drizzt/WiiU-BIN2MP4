@@ -25,7 +25,9 @@ namespace bin2mp4
         public Form1()
         {
             InitializeComponent();
-            AttachConsole(ATTACH_PARENT_PROCESS);
+            //AttachConsole doesn't exists nor is needed on Mono
+            if (Type.GetType ("Mono.Runtime") == null)
+                AttachConsole(ATTACH_PARENT_PROCESS);
 
             //Check if command line arguments were given and do those instead of launching Windows form
             if (args.Length > 1)
@@ -149,7 +151,7 @@ namespace bin2mp4
             }
             else
             {
-                string tempDir = outMP4_dir + "\\" + outMP4_name + ".mp4";
+                string tempDir = Path.Combine(outMP4_dir, outMP4_name + ".mp4");
                 File.WriteAllBytes(tempDir, outMP4);
                 Console.WriteLine("");
                 Console.WriteLine(" File saved to: \"" + tempDir + "\"");
