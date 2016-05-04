@@ -16,7 +16,14 @@ namespace bin2mp4
                 Console.WriteLine(" Example: bin2mp4.exe 540 \"C:\\files\\pong.bin\" \"C:\\files\\pong.mp4\"");
                 Environment.Exit(-4);
             }
-
+            if (args.Length == 2)
+            {
+                Console.WriteLine("");
+                Console.WriteLine(" Not enough input variables!");
+                Console.WriteLine(" Usage: bin2mp4.exe [version] [input_file] optional:[output]");
+                Console.WriteLine(" Example: bin2mp4.exe 540 \"C:\\files\\pong.bin\" \"C:\\files\\pong.mp4\"");
+                Environment.Exit(-4);
+            }
             string inPath = args[2].Trim('"');
             VerCheck(args[1], targetVersions);
             FileCheck(args[2]);
