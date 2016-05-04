@@ -26,7 +26,8 @@ namespace bin2mp4
             string inPath = args[2].Trim('"');
             VerCheck(args[1], targetVersions);
             FileCheck(args[2]);
-            OutputCheck(args[2],args[3],args.Length);
+            string outPath = args.Length == 4 ? args[3] : args[2];
+            OutputCheck(args[2],outPath);
            
             Form1.cmdConvert = true;
             return inPath;
@@ -68,27 +69,19 @@ namespace bin2mp4
             }
         }
 
-        public static void OutputCheck(string inPath, string outPath, int arguments)
+        public static void OutputCheck(string inPath, string outPath)
         {
             inPath = inPath.Trim('"');
             outPath = outPath.Trim('"');
             string outDir;
-            if (arguments == 4)
+            if (Path.HasExtension(outPath) == true)
             {
-                if (Path.HasExtension(outPath) == true)
-                {
-                    Form1.outMP4_name = Path.GetFileNameWithoutExtension(outPath);
-                    outDir = Path.GetDirectoryName(outPath);
-                }
-                else
-                {
-                    outDir = Path.GetFullPath(outPath);
-                    Form1.outMP4_name = Path.GetFileNameWithoutExtension(inPath);
-                }
+                Form1.outMP4_name = Path.GetFileNameWithoutExtension(outPath);
+                outDir = Path.GetDirectoryName(outPath);
             }
             else
             {
-                outDir = Path.GetDirectoryName(inPath);
+                outDir = Path.GetFullPath(outPath);
                 Form1.outMP4_name = Path.GetFileNameWithoutExtension(inPath);
             }
             
