@@ -1,4 +1,6 @@
-﻿namespace bin2mp4
+﻿#if !CONSOLE
+
+namespace bin2mp4
 {
     partial class Form1
     {
@@ -76,11 +78,6 @@
             this.targetVersionBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.targetVersionBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.targetVersionBox.FormattingEnabled = true;
-            this.targetVersionBox.Items.AddRange(new object[] {
-            "5.3.2",
-            "5.4.0",
-            "5.5.0",
-            "5.5.1"});
             this.targetVersionBox.Location = new System.Drawing.Point(343, 31);
             this.targetVersionBox.Name = "targetVersionBox";
             this.targetVersionBox.Size = new System.Drawing.Size(121, 21);
@@ -173,3 +170,4 @@
     }
 }
 
+#endif
