@@ -6,7 +6,11 @@ using System.IO;
 
 namespace bin2mp4
 {
+#if CONSOLE
+    public partial class Form1
+#else
     public partial class Form1 : Form
+#endif
     {
         string[] args = Environment.GetCommandLineArgs();
         public byte[] inBIN;
@@ -24,7 +28,10 @@ namespace bin2mp4
 
         public Form1()
         {
+            string[] targetVers = {"5.3.2", "5.4.0", "5.5.0", "5.5.1"};
+#if !CONSOLE
             InitializeComponent();
+#endif
             //AttachConsole doesn't exists nor is needed on Mono
             if (Type.GetType ("Mono.Runtime") == null)
                 AttachConsole(ATTACH_PARENT_PROCESS);
@@ -32,10 +39,13 @@ namespace bin2mp4
             //Check if command line arguments were given and do those instead of launching Windows form
             if (args.Length > 1)
             { 
-                _OpenFile(_CommandLine.Init(args, targetVersionBox.Items));
+                _OpenFile(_CommandLine.Init(args, targetVers));
                 Environment.Exit(0);
             }
+#if !CONSOLE
+            targetVersionBox.Items.AddRange(targetVers);
             targetVersionBox.SelectedIndex = 1; //Set default version to 5.4
+#endif
         }
         public void _OpenFile(string fileName)
         {
@@ -47,7 +57,9 @@ namespace bin2mp4
 
             if (inBIN.Length > 29832)
             {
+#if !CONSOLE
                 label1.Text = "Input file exceeds 29.1KB (29832 bytes) size limit!";
+#endif
                 if (cmdConvert)
                 {
                     Console.WriteLine("");
@@ -138,6 +150,7 @@ namespace bin2mp4
         {
             if (!cmdConvert)
             {
+#if !CONSOLE
                 using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
                 {
                     saveFileDialog1.FileName = outMP4_name;
@@ -148,6 +161,7 @@ namespace bin2mp4
                     }
                     File.WriteAllBytes(saveFileDialog1.FileName, outMP4);
                 }
+#endif
             }
             else
             {
@@ -157,6 +171,7 @@ namespace bin2mp4
                 Console.WriteLine(" File saved to: \"" + tempDir + "\"");
             }
         }
+#if !CONSOLE
 //Windows Forms event triggers, further info about these can be found in Form1.Designer.cs
         private void button1_Click(object sender, EventArgs e)
         {
@@ -228,5 +243,6 @@ namespace bin2mp4
         {
             versionLabel.ForeColor = System.Drawing.Color.SlateGray;
         }
+#endif
     }
 }
